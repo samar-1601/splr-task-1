@@ -23,6 +23,7 @@
 .list-item{
     display: grid;
     padding: 10px;
+    border-radius: 5px;
     grid-template-columns: 2fr 8fr;
 }
 .list-item-image{

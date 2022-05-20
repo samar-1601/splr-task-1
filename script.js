@@ -12,7 +12,7 @@ const getTruncatedText = (title)=>{
     }
     return title;
 }
-const addHTMLComponents = (value, id) =>{
+const addLeftHTMLComponents = (value, id) =>{
 
     const listItem = document.createElement("li");
     const listItemText = document.createElement("span");
@@ -25,7 +25,6 @@ const addHTMLComponents = (value, id) =>{
     listItem.id = "l" + id.toString();
     listItemText.innerText = getTruncatedText(value.title);
     listItemImage.src = value.previewImage;
-    listItem.style.borderRadius = "5px";
 
     listItem.addEventListener("click",
         ()=>toggleRightImage(listItem, id)
@@ -39,10 +38,7 @@ const addHTMLComponents = (value, id) =>{
         toggleRightImage(listItem,0);
 }
 
-const updateImageDescription = (id, newDesc)=>{
-    const listItem = document.querySelector("#"+"l"+id).querySelector("span");
-    listItem.innerText = newDesc;
-}
+
 
 const constructRightPane = ()=>{
     const rightImageDescription = document.createElement("textarea");
@@ -55,9 +51,20 @@ const constructRightPane = ()=>{
     rightGrid.appendChild(rightImageDescription);
 
 }
+
+const updateDescription = (id, updatedDesc, listItem)=>{
+    console.log("updateImage Desc called");
+    console.log(id);
+    itemData[id].title = updatedDesc;
+    leftImageTitle = listItem.querySelector("span");
+    leftImageTitle.innerText = getTruncatedText(updatedDesc);
+    console.log(itemData);
+}
+
 let prevListItem;
 const toggleRightImage = (listItem, id)=>{
 
+    console.log("toggle right image called\n");
     if(prevListItem)
     {
         prevListItem.style.backgroundColor = "";
@@ -70,14 +77,20 @@ const toggleRightImage = (listItem, id)=>{
     const rightImageDescription = document.querySelector(".right-image-desc");
     const rightImage = document.querySelector(".right-image");
 
-    rightImageDescription.innerHTML = item.title;
+    rightImageDescription.value = item.title;
     rightImage.src = item.previewImage;
+    console.log(rightImageDescription.value)
 
-    //updating title functionality
-
-    // rightImageDescription.addEventListener("input", 
-    //     ()=> updateImageDescription(id, rightImageDescription.value)
-    // )
+    // updating title functionality
+    
+    const index = id;
+    rightImageDescription.addEventListener("input", 
+    ()=>{
+            const desc = rightImageDescription.value;
+            console.log(desc);
+            return updateDescription(index, desc, listItem);
+        }
+    )
 
     prevListItem = listItem;
 }
@@ -86,13 +99,13 @@ function mainFunc(){
     // console.log(itemData)
     constructRightPane()
     itemData.forEach((value, index) => {
-        addHTMLComponents(value, index)
+        addLeftHTMLComponents(value, index)
     });
 }
 
 
 let itemData;
-fetch('./Data.json')
+fetch('./data.json')
   .then(response => response.json())
   .then(data => {
       itemData = data;
