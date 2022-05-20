@@ -1,15 +1,14 @@
 * {
-    padding: 0;
     margin: 0;
 }
 
 .grid-container {
-    height: auto;
     width: 900px;
     margin: auto;
     display: grid;
     grid-template-columns: 300px 2fr;
-    justify-content: center;
+    align-items: start;
+    justify-content: center ;
     grid-gap: 20px;
 }
 

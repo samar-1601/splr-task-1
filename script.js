@@ -2,8 +2,9 @@ const leftGrid = document.querySelector(".left-grid");
 const rightGrid= document.querySelector(".right-grid");
 const listItems = document.querySelector(".list-items");
 
+var idx = 0;
+
 const getTruncatedText = (title)=>{
-    // console.log(title);
     let truncatedTitle = "";
     if(title.length > 31)
     {
@@ -52,7 +53,7 @@ const constructRightPane = ()=>{
 
 }
 
-const updateDescription = (id, updatedDesc, listItem)=>{
+const updateDescription = async(id, updatedDesc, listItem)=>{
     console.log("updateImage Desc called");
     console.log(id);
     itemData[id].title = updatedDesc;
@@ -64,6 +65,7 @@ const updateDescription = (id, updatedDesc, listItem)=>{
 let prevListItem;
 const toggleRightImage = (listItem, id)=>{
 
+    idx = id;
     console.log("toggle right image called\n");
     if(prevListItem)
     {
@@ -84,15 +86,31 @@ const toggleRightImage = (listItem, id)=>{
     // updating title functionality
     
     const index = id;
+    console.log("The ID before call is : "+ id);
     rightImageDescription.addEventListener("input", 
     ()=>{
             const desc = rightImageDescription.value;
             console.log(desc);
-            return updateDescription(index, desc, listItem);
+            updateDescription(index, desc, listItem);
         }
     )
 
     prevListItem = listItem;
+}
+
+const KeyFunction = (e)=>{
+    if(e.key == "ArrowUp")
+    {
+        idx = (idx>0)?(idx-1):idx;
+        const listItem = document.querySelector("#l"+idx);
+        toggleRightImage(listItem, idx);
+    }
+    else if(e.key == "ArrowDown")
+    {
+        idx = (idx===(itemData.length-1))?idx:(idx+1);
+        const listItem = document.querySelector("#l"+idx);
+        toggleRightImage(listItem, idx);
+    }
 }
 
 function mainFunc(){
@@ -101,6 +119,7 @@ function mainFunc(){
     itemData.forEach((value, index) => {
         addLeftHTMLComponents(value, index)
     });
+    window.addEventListener("keydown", KeyFunction);
 }
 
 
