@@ -3,7 +3,6 @@ const rightGrid= document.querySelector(".right-grid");
 const listItems = document.querySelector(".list-items");
 const rightImageDesc = document.querySelector(".right-image-desc");
 
-
 var idx = 0;
 
 const getTruncatedText = (title)=>{
