@@ -1,6 +1,8 @@
 const leftGrid = document.querySelector(".left-grid");
 const rightGrid= document.querySelector(".right-grid");
 const listItems = document.querySelector(".list-items");
+const rightImageDesc = document.querySelector(".right-image-desc");
+
 
 var idx = 0;
 
@@ -28,45 +30,25 @@ const addLeftHTMLComponents = (value, id) =>{
     listItemImage.src = value.previewImage;
 
     listItem.addEventListener("click",
-        ()=>toggleRightImage(listItem, id)
+        ()=>{
+            idx = id;
+            toggleRightImage()
+        }
     )
 
     listItem.appendChild(listItemImage)
     listItem.appendChild(listItemText)
     listItems.appendChild(listItem);
-    // console.log(listItem)
+
     if(id==0)
         toggleRightImage(listItem,0);
 }
 
-
-
-const constructRightPane = ()=>{
-    const rightImageDescription = document.createElement("textarea");
-    const rightImage = document.createElement("img");
-    
-    rightImageDescription.classList.add("right-image-desc");
-    rightImage.classList.add("right-image");
-
-    rightGrid.appendChild(rightImage);
-    rightGrid.appendChild(rightImageDescription);
-
-}
-
-const updateDescription = async(id, updatedDesc, listItem)=>{
-    console.log("updateImage Desc called");
-    console.log(id);
-    itemData[id].title = updatedDesc;
-    leftImageTitle = listItem.querySelector("span");
-    leftImageTitle.innerText = getTruncatedText(updatedDesc);
-    console.log(itemData);
-}
-
 let prevListItem;
-const toggleRightImage = (listItem, id)=>{
+const toggleRightImage = ()=>{
 
-    idx = id;
-    console.log("toggle right image called\n");
+    const listItem = document.querySelector("#l"+idx);
+
     if(prevListItem)
     {
         prevListItem.style.backgroundColor = "";
@@ -75,51 +57,60 @@ const toggleRightImage = (listItem, id)=>{
     listItem.style.backgroundColor = "#015ece";
     listItem.style.color = "white";
 
-    item = itemData[id];
-    const rightImageDescription = document.querySelector(".right-image-desc");
+    item = itemData[idx];
     const rightImage = document.querySelector(".right-image");
-
-    rightImageDescription.value = item.title;
     rightImage.src = item.previewImage;
-    console.log(rightImageDescription.value)
-
-    // updating title functionality
     
-    const index = id;
-    console.log("The ID before call is : "+ id);
-    rightImageDescription.addEventListener("input", 
-    ()=>{
-            const desc = rightImageDescription.value;
-            console.log(desc);
-            updateDescription(index, desc, listItem);
-        }
-    )
+    console.log(idx);
+    console.log(item.title)
+    rightImageDesc.value = item.title;
 
     prevListItem = listItem;
 }
 
-const KeyFunction = (e)=>{
-    if(e.key == "ArrowUp")
-    {
-        idx = (idx>0)?(idx-1):idx;
-        const listItem = document.querySelector("#l"+idx);
-        toggleRightImage(listItem, idx);
-    }
-    else if(e.key == "ArrowDown")
-    {
-        idx = (idx===(itemData.length-1))?idx:(idx+1);
-        const listItem = document.querySelector("#l"+idx);
-        toggleRightImage(listItem, idx);
-    }
+const toggleUp = ()=>{
+    console.log("toggledUp");
+    idx = (idx>0)?(idx-1):idx;
+    toggleRightImage();
+}
+
+const toggleDown = ()=>{
+    console.log("toggledDown");
+    idx = (idx===(itemData.length-1))?idx:(idx+1);
+    toggleRightImage();
+}
+
+const updateDescription = (updatedDesc)=>{
+    
+    console.log(idx);
+    console.log(updatedDesc);
+    const listItem = document.querySelector("#l"+idx);
+    itemData[idx].title = updatedDesc;
+    leftImageTitle = listItem.querySelector("span");
+    leftImageTitle.innerText = getTruncatedText(updatedDesc);
+    console.log(itemData);
 }
 
 function mainFunc(){
-    // console.log(itemData)
-    constructRightPane()
+    
     itemData.forEach((value, index) => {
         addLeftHTMLComponents(value, index)
     });
-    window.addEventListener("keydown", KeyFunction);
+    document.onkeydown = function(e) {
+        console.log("presss")
+        switch (e.key) {
+            case "ArrowDown":
+                toggleDown();
+                break;
+            case "ArrowUp":
+                toggleUp();
+                break;
+        }
+    };
+
+    rightImageDesc.addEventListener("input", (e)=>{
+        updateDescription(rightImageDesc.value)
+    })
 }
 
 
@@ -131,5 +122,4 @@ fetch('./data.json')
       mainFunc();
     })
   .catch(error => console.log(error));
-
 
