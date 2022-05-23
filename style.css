@@ -34,7 +34,7 @@
 }
 .list-item-text{
     height: auto;
-    float: right;
+    max-width: 224px;
     margin: auto 0px;
 }
 
@@ -56,3 +56,19 @@
     resize: none;
     border: 0ch;
 }
+
+.left-text, .right-text{
+    max-width: 50%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .left-text {
+    text-overflow: ellipsis;
+  }
+  
+  .right-text{
+    text-overflow: "";
+    direction: rtl;
+  }

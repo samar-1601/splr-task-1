@@ -6,26 +6,35 @@ const rightImageDesc = document.querySelector(".right-image-desc");
 var idx = 0;
 
 const getTruncatedText = (title)=>{
-    let truncatedTitle = "";
-    if(title.length > 31)
-    {
-        truncatedTitle = title.slice(0,14) + "..." + title.slice(-14);
-        return truncatedTitle;
-    }
-    return title;
+    let len = title.length;
+    let leftText, rightText;
+    leftText = title.slice(0,len/2);
+    if(len%2==0)
+        rightText = title.slice(-len/2);
+    else 
+        rightText = title.slice(-len/2-1);
+    return [leftText, rightText];
 }
 const addLeftHTMLComponents = (value, id) =>{
 
     const listItem = document.createElement("li");
-    const listItemText = document.createElement("span");
+    const listTitle = document.createElement("span");
+    const listItemTextLeft = document.createElement("span");
+    const listItemTextRight = document.createElement("span");
     const listItemImage = document.createElement("img");
 
     listItem.classList.add("list-item");
-    listItemText.classList.add("list-item-text")
+    listTitle.classList.add("list-item-text")
+    listItemTextLeft.classList.add("left-text")
+    listItemTextRight.classList.add("right-text")
     listItemImage.classList.add("list-item-image")
+    listItemImage.setAttribute("alt", value.title)
 
     listItem.id = "l" + id.toString();
-    listItemText.innerText = getTruncatedText(value.title);
+    let [leftText, rightText] = getTruncatedText(value.title);
+    listItemTextLeft.innerText = leftText;
+    listItemTextRight.innerText = rightText;
+
     listItemImage.src = value.previewImage;
 
     listItem.addEventListener("click",
@@ -35,8 +44,10 @@ const addLeftHTMLComponents = (value, id) =>{
         }
     )
 
-    listItem.appendChild(listItemImage)
-    listItem.appendChild(listItemText)
+    listItem.appendChild(listItemImage);
+    listItem.appendChild(listTitle);
+    listTitle.appendChild(listItemTextLeft);
+    listTitle.appendChild(listItemTextRight);
     listItems.appendChild(listItem);
 
     if(id==0)
@@ -85,8 +96,11 @@ const updateDescription = (updatedDesc)=>{
     console.log(updatedDesc);
     const listItem = document.querySelector("#l"+idx);
     itemData[idx].title = updatedDesc;
-    leftImageTitle = listItem.querySelector("span");
-    leftImageTitle.innerText = getTruncatedText(updatedDesc);
+    const listItemTextLeft = listItem.querySelector(".left-text");
+    const listItemTextRight = listItem.querySelector(".right-text");
+    let [leftText, rightText] = getTruncatedText(updatedDesc);
+    listItemTextLeft.innerText = leftText;
+    listItemTextRight.innerText = rightText;
     console.log(itemData);
 }
 
