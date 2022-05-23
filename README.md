@@ -6,7 +6,8 @@ This repo has the code for the first task assigned to me @sprinklr internship.
 
 ![Untitled](./readme_images/desktop.png)
 
-<br/>
+
 - As seen in the Mobile Browser:
+
 
 ![Untitled](./readme_images/mobile.png)
