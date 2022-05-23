@@ -49,9 +49,11 @@
     width: 450px;
     object-fit: cover;
 }
+
 .right-image-desc{
     margin-top: 8px;
     padding: 8px;
+    max-height: 32px;
     text-align: center;
     resize: none;
     border: 0ch;
@@ -71,4 +73,11 @@
   .right-text{
     text-overflow: "";
     direction: rtl;
+  }
+
+  @media screen and (max-width: 750px) {
+    .grid-container{
+        display: block;
+        margin: auto;
+    }
   }
